@@ -138,17 +138,6 @@ textarea{ resize:vertical; min-height:80px; }
 }
 .start-test-btn:hover { background: var(--green-hover); }
 
-@media(max-width: 950px){
-    .sidebar { position: relative; width: 100%; height: auto; border-right: none; border-bottom: 1px solid var(--border); }
-    .sidebar.collapsed { width: 100%; padding: 25px 18px; }
-    .sidebar.collapsed .logo-sub, .sidebar.collapsed .menu-title, .sidebar.collapsed .menu span, .sidebar.collapsed .logo-title { display: block !important; }
-    .sidebar.collapsed .logo-title-collapsed { display: none !important; }
-    .main { margin-left: 0 !important; }
-    .main.expanded { margin-left: 0 !important; }
-    .content { padding: 15px; }
-    .topbar { padding: 0 15px; }
-}
-
 @media(max-width: 600px){
     .card { padding: 15px; }
     .topbar { height: auto; min-height: 65px; flex-direction: column; justify-content: center; gap: 8px; padding: 10px 15px; }
@@ -355,6 +344,22 @@ let allBooks = JSON.parse(localStorage.getItem('choryak_books')) || [];
 let userAnswers = {};
 let timerInterval = null;
 let currentTotalSeconds = 0;
+
+// Санҷиши экран ҳангоми боркунии аввалини саҳифа
+window.addEventListener('DOMContentLoaded', () => {
+    let sidebar = document.getElementById("sidebar");
+    let main = document.getElementById("mainArea");
+    
+    // Агар экран аз 950 пикселл хурд бошад (телефон), сайдбар баста мешавад
+    if (window.innerWidth <= 950) {
+        sidebar.classList.add("collapsed");
+        main.classList.add("expanded");
+    } else {
+        // Агар компютер бошад, пешфарз кушода мемонад
+        sidebar.classList.remove("collapsed");
+        main.classList.remove("expanded");
+    }
+});
 
 function encodeToCodes(str) {
     if(!str) return "";
@@ -666,8 +671,8 @@ function calculateScore(){
     if(timerInterval) clearInterval(timerInterval);
     let sClass = document.getElementById("searchClass").value.trim();
     let sQuarter = document.getElementById("searchQuarter").value;
-    let sSubject = document.getElementById("searchSubject").value.trim().toLowerCase();
-    let filtered = allQuestions.filter(q => q.class === sClass && q.quarter === sQuarter && q.subject.includes(sSubject));
+    let sSubject = document.getElementById("searchSubject").value.trim();
+    let filtered = allQuestions.filter(q => q.class === sClass && q.quarter === sQuarter && q.subject.includes(sSubject.toLowerCase()));
 
     if(filtered.length === 0) return;
 
@@ -681,47 +686,48 @@ function calculateScore(){
         }
     });
 
-    let finalGrade = Math.round((correctCount / totalQuestions) * 5);
-    if(finalGrade < 2) finalGrade = 2;
+    let finalGrade = (correctCount / totalQuestions) * 10;
+
+    testHistory.push({
+        date: new Date().toLocaleString(),
+        subject: sSubject,
+        class: sClass,
+        quarter: sQuarter,
+        correct: correctCount,
+        total: totalQuestions,
+        grade: finalGrade.toFixed(1)
+    });
+    localStorage.setItem('choryak_history', JSON.stringify(testHistory));
 
     let scoreBox = document.getElementById("finalScoreBox");
-    scoreBox.innerHTML = `Ҷавобҳои дуруст: ${correctCount} аз ${totalQuestions}. Баҳои шумо: <span style="color:var(--green);">${finalGrade}</span>`;
-    
+    scoreBox.innerHTML = `
+        <div style="background:var(--green-soft); border:1px solid rgba(16,185,129,0.3); padding:15px; border-radius:8px; color:var(--green);">
+            ✅ Шумо аз ${totalQuestions} савол <b>${correctCount}</b>тоашро дуруст ҷавоб додед.<br>
+            ⭐ Баҳои шумо бо низоми 10-баллӣ: <b>${finalGrade.toFixed(1)} аз 10</b>
+        </div>
+    `;
     document.getElementById("submitTestBtn").style.display = "none";
     document.getElementById("timerControlWrapper").style.display = "none";
-
-    let historyRecord = {
-        class: sClass,
-        subject: sSubject,
-        quarter: sQuarter,
-        score: correctCount,
-        total: totalQuestions,
-        grade: finalGrade,
-        date: new Date().toLocaleDateString() + " " + new Date().toLocaleTimeString()
-    };
-
-    testHistory.push(historyRecord);
-    localStorage.setItem('choryak_history', JSON.stringify(testHistory));
+    scoreBox.scrollIntoView({ behavior: 'smooth' });
 }
 
 function renderHistory(){
     let container = document.getElementById("historyContainer");
     if(testHistory.length === 0){
-        container.innerHTML = `<p style="color:var(--text-muted);">Ҳоло ягон таърихи натиҷа сабт нашудааст.</p>`;
+        container.innerHTML = `<p style="color:var(--text-muted);">Ҳоло ягон натиҷа сабт нашудааст.</p>`;
         return;
     }
 
     let html = "";
-    testHistory.forEach((h, idx) => {
+    testHistory.slice().reverse().forEach((item, idx) => {
         html += `
             <div class="test-item-card">
                 <div class="test-meta">
-                    <div><b>#${idx + 1}</b> &nbsp;|&nbsp; <b>Фан:</b> ${h.subject} &nbsp;|&nbsp; <b>Синф:</b> ${h.class} &nbsp;|&nbsp; <b>Чоряк:</b> ${h.quarter}</div>
-                    <div><b>Сана:</b> ${h.date}</div>
+                    <div><b>Сана:</b> ${item.date}</div>
+                    <div style="color:var(--green); font-weight:700;">Baha: ${item.grade} / 10</div>
                 </div>
-                <div style="font-size:14px; font-weight:600;">
-                    Натиҷа: ${h.score} / ${h.total} &nbsp;|&nbsp; Баҳо: <span style="color:var(--green);">${h.grade}</span>
-                </div>
+                <div style="font-size:14px; font-weight:600;">Фан: ${item.subject} | Синф: ${item.class} | Чоряк: ${item.quarter}</div>
+                <div style="font-size:13px; color:var(--text-muted); margin-top:5px;">Ҷавобҳои дуруст: ${item.correct} аз ${item.total}</div>
             </div>
         `;
     });
@@ -729,15 +735,10 @@ function renderHistory(){
 }
 
 function exportData(){
-    let dataObj = {
-        questions: allQuestions,
-        history: testHistory,
-        books: allBooks
-    };
-    let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(dataObj));
+    let dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(allQuestions));
     let downloadAnchor = document.createElement('a');
     downloadAnchor.setAttribute("href", dataStr);
-    downloadAnchor.setAttribute("download", "choryak_platform_data.json");
+    downloadAnchor.setAttribute("download", "choryak_questions_backup.json");
     document.body.appendChild(downloadAnchor);
     downloadAnchor.click();
     downloadAnchor.remove();
@@ -750,18 +751,16 @@ function importData(event){
     reader.onload = function(e) {
         try {
             let imported = JSON.parse(e.target.result);
-            if(imported.questions) allQuestions = imported.questions;
-            if(imported.history) testHistory = imported.history;
-            if(imported.books) allBooks = imported.books;
-
-            localStorage.setItem('choryak_questions', JSON.stringify(allQuestions));
-            localStorage.setItem('choryak_history', JSON.stringify(testHistory));
-            localStorage.setItem('choryak_books', JSON.stringify(allBooks));
-
-            alert("Маълумот бомуваффақият ворид карда шуд!");
-            location.reload();
+            if(Array.isArray(imported)) {
+                allQuestions = imported;
+                localStorage.setItem('choryak_questions', JSON.stringify(allQuestions));
+                alert("Маълумот бомуваффақият ворид карда шуд!");
+                renderTestList();
+            } else {
+                alert("Файли нодуруст!");
+            }
         } catch(err) {
-            alert("Хатогӣ дар хондани файли JSON!");
+            alert("Хатогӣ ҳангоми хондани файл!");
         }
     };
     reader.readAsText(file);
