@@ -18,11 +18,11 @@
             overflow-x: hidden;
         }
 
-        /* Сохтори асосӣ */
         .app-container {
             display: flex;
             height: 100vh;
             width: 100vw;
+            position: relative;
         }
 
         /* Сайдбар */
@@ -36,6 +36,7 @@
             gap: 15px;
             transition: transform 0.3s ease;
             z-index: 1000;
+            flex-shrink: 0;
         }
 
         .sidebar-logo {
@@ -72,70 +73,69 @@
             background-color: #0b132b;
         }
 
-        /* Тугмаи меню барои телефон (дар компютер хомӯш аст) */
+        /* Тугмаи меню барои телефон */
         .menu-toggle {
             display: none;
             background: #4cc9f0;
             color: #0b132b;
             border: none;
-            padding: 10px 15px;
+            padding: 8px 12px;
             border-radius: 6px;
             font-weight: bold;
             cursor: pointer;
-            margin-bottom: 15px;
+            margin-bottom: 12px;
             align-self: flex-start;
         }
 
-        /* Блоки интихобҳо (Синф, Чоряк, Фан) */
+        /* Блоки интихобҳо */
         .selectors-wrapper {
             background-color: #1c2541;
-            padding: 20px;
+            padding: 15px;
             border-radius: 12px;
             border: 1px solid #3a506b;
             display: flex;
             flex-direction: column;
-            gap: 15px;
-            margin-top: 10px;
+            gap: 10px;
+            margin-bottom: 20px;
         }
 
         .selectors-title {
-            font-size: 18px;
+            font-size: 15px;
             font-weight: bold;
             color: #f72585;
         }
 
+        /* Истифодаи Grid барои дар як қатор мондани интихобҳо */
         .selectors-row {
-            display: flex;
-            gap: 15px;
-            flex-wrap: wrap;
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
         }
 
         .select-group {
-            flex: 1;
-            min-width: 120px;
             display: flex;
             flex-direction: column;
-            gap: 5px;
+            gap: 4px;
         }
 
         .select-group label {
-            font-size: 14px;
+            font-size: 12px;
             color: #adb5bd;
         }
 
         .select-group select {
-            padding: 10px;
-            border-radius: 8px;
+            padding: 8px;
+            border-radius: 6px;
             border: 1px solid #3a506b;
             background-color: #0b132b;
             color: #ffffff;
-            font-size: 14px;
+            font-size: 13px;
             outline: none;
+            width: 100%;
         }
 
         /* Майдони барориши саволҳо */
         .questions-container {
-            margin-top: 20px;
             background-color: #1c2541;
             padding: 20px;
             border-radius: 12px;
@@ -143,23 +143,23 @@
             flex: 1;
         }
 
-        /* Тарҳрезӣ барои телефонҳо (Responsive Media Query) */
+        /* Тарҳрезӣ барои экранҳои телефон (Responsive) */
         @media screen and (max-width: 768px) {
             .app-container {
                 flex-direction: column;
             }
 
-            /* Сайдбар дар телефон дар аввал пинҳон мешавад */
+            /* Сайдбар дар телефон дар аввал пурра пӯшида (берун аз экран) мешавад */
             .sidebar {
                 position: fixed;
                 left: -260px;
                 top: 0;
                 bottom: 0;
                 width: 260px;
-                box-shadow: 5px 0 15px rgba(0,0,0,0.5);
+                box-shadow: 5px 0 15px rgba(0,0,0,0.6);
             }
 
-            /* Ҳангоми кушода шудан сайдбар мебарояд */
+            /* Ҳангоми кушода шудан сайдбар ба дохил меояд */
             .sidebar.open {
                 left: 0;
             }
@@ -169,7 +169,7 @@
             }
 
             .main-content {
-                padding: 10px;
+                padding: 12px;
                 width: 100%;
             }
         }
@@ -192,14 +192,13 @@
             <!-- Тугмаи кушодани меню дар телефон -->
             <button class="menu-toggle" id="menuToggle">☰ Меню</button>
 
-            <!-- Блоки интихоби синфу чоряк ва фан -->
+            <!-- Блоки интихобҳо -->
             <div class="selectors-wrapper">
-                <div class="selectors-title">Интихоби Синфу Чоряк ва Фанҳо</div>
-                <p style="font-size: 13px; color: #adb5bd;">Барои дидани тестҳо майдонҳои зеринро пур кунед.</p>
+                <div class="selectors-title">Интихоби Синфу Чоряк ва Фан</div>
                 
                 <div class="selectors-row">
                     <div class="select-group">
-                        <label>Рақами Синф</label>
+                        <label>Синф</label>
                         <select id="classSelect">
                             <option value="">Интихоб...</option>
                             <option value="5">Синфи 5</option>
@@ -224,7 +223,7 @@
                     </div>
 
                     <div class="select-group">
-                        <label>Номи Фан</label>
+                        <label>Фан</label>
                         <select id="subjectSelect">
                             <option value="">Фан...</option>
                             <option value="math">Математика</option>
@@ -236,9 +235,9 @@
                 </div>
             </div>
 
-            <!-- Ҷои барориши саволҳо ва тестҳо -->
+            <!-- Ҷои барориши саволҳо -->
             <div class="questions-container" id="questionsContainer">
-                <p style="color: #adb5bd; text-align: center; margin-top: 20px;">Лутфан синф, чоряк ва фанро интихоб кунед то тестҳо пайдо шаванд.</p>
+                <p style="color: #adb5bd; text-align: center; font-size: 13px; margin-top: 20px;">Лутфан параметрҳоро дар боло интихоб кунед то тестҳо пайдо шаванд.</p>
             </div>
         </div>
     </div>
@@ -252,7 +251,7 @@
             sidebar.classList.toggle('open');
         });
 
-        // Пӯшидани сайдбар ҳангоми пахш кардани берун аз он дар телефон
+        // Пӯшидани сайдбар ҳангоми пахш кардани ягон ҷои беруна дар экран
         document.addEventListener('click', (event) => {
             if (window.innerWidth <= 768) {
                 if (!sidebar.contains(event.target) && event.target !== menuToggle) {
