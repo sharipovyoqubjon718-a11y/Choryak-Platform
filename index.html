@@ -73,7 +73,7 @@
             width: 100%;
         }
 
-        /* Қисми болоӣ бо тугма ва интихобҳо дар як сатр */
+        /* Қисми болоӣ, ки дар он тугма ва интихобҳо паҳлӯи ҳам ҳастанд */
         .top-action-bar {
             display: flex;
             align-items: center;
@@ -90,15 +90,15 @@
             border-radius: 8px;
             font-weight: bold;
             cursor: pointer;
-            font-size: 13px;
-            height: 42px;
+            font-size: 14px;
+            height: 44px;
             display: flex;
             align-items: center;
             justify-content: center;
             flex-shrink: 0;
         }
 
-        /* Блоки интихобҳо ки паҳлӯи ҳам меистанд */
+        /* Блоки интихобҳо */
         .selectors-row {
             display: grid;
             grid-template-columns: repeat(3, 1fr);
@@ -151,15 +151,11 @@
             border: 1px solid #3a506b;
         }
 
-        /* Тарҳрезӣ барои телефонҳо */
+        /* Тарҳрезӣ барои телефонҳо (экрани то 1024px) */
         @media screen and (max-width: 1024px) {
-            .app-container {
-                flex-direction: column;
-            }
-
             .sidebar {
                 position: fixed;
-                left: -280px;
+                left: -280px; /* Дар аввал сайдбар пинҳон аст */
                 top: 0;
                 bottom: 0;
                 width: 260px;
@@ -167,7 +163,7 @@
             }
 
             .sidebar.open {
-                left: 0;
+                left: 0; /* Ҳангоми зер кардани тугма кушода мешавад */
             }
         }
     </style>
@@ -175,7 +171,7 @@
 <body>
 
     <div class="app-container">
-        <!-- Сайдбар ки дар телефон дар аввал маҳкам аст -->
+        <!-- Сайдбар ки дар аввал дар телефон маҳкам аст -->
         <div class="sidebar" id="sidebar">
             <div class="sidebar-logo">Choryak Platform</div>
             <div class="nav-item active">🏠 Асосӣ</div>
@@ -186,7 +182,7 @@
 
         <!-- Қисми асосӣ -->
         <div class="main-content">
-            <!-- Тугмаи меню ва интихобҳо дар як сатр паҳлӯи ҳам -->
+            <!-- Тугмаи меню ва интихобҳо дар боло, дар як сатр паҳлӯи ҳам -->
             <div class="top-action-bar">
                 <button class="menu-toggle" id="menuToggle">☰</button>
                 
@@ -244,10 +240,12 @@
         const subjectSelect = document.getElementById('subjectSelect');
         const questionsContainer = document.getElementById('questionsContainer');
 
+        // Кушода ва пӯшида кардани сайдбар бо тугма
         menuToggle.addEventListener('click', () => {
             sidebar.classList.toggle('open');
         });
 
+        // Пӯшида шудани сайдбар ҳангоми зер кардан ба беруни он дар телефон
         document.addEventListener('click', (event) => {
             if (window.innerWidth <= 1024) {
                 if (!sidebar.contains(event.target) && event.target !== menuToggle) {
