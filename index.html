@@ -1,9 +1,14 @@
+```html
 <!DOCTYPE html>
 <html lang="tg">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
     <title>Choryak Platform</title>
+    <meta name="description" content="Choryak Platform — платформа барои тестҳо, синфҳо, чорякҳо ва натиҷаҳои хонандагон.">
+    <meta name="keywords" content="Choryak, Чоряк, тест, мактаб, хонанда, синф, чоряк, натиҷа">
+
     <style>
         * {
             margin: 0;
@@ -12,30 +17,50 @@
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
 
+        html,
+        body {
+            width: 100%;
+            height: 100%;
+        }
+
         body {
             background-color: #0b132b;
             color: #ffffff;
             overflow-x: hidden;
         }
 
+        /* =========================
+           APP
+           ========================= */
+
         .app-container {
             display: flex;
-            height: 100vh;
-            width: 100vw;
+            width: 100%;
+            min-height: 100vh;
             position: relative;
         }
 
-        /* Сайдбар */
+        /* =========================
+           SIDEBAR
+           ========================= */
+
         .sidebar {
             width: 260px;
+            min-width: 260px;
+            height: 100vh;
+
             background-color: #1c2541;
             border-right: 1px solid #3a506b;
+
             display: flex;
             flex-direction: column;
+
             padding: 20px 15px;
             gap: 15px;
+
             z-index: 1000;
             flex-shrink: 0;
+
             transition: left 0.3s ease;
         }
 
@@ -49,236 +74,812 @@
         .nav-item {
             padding: 12px 15px;
             border-radius: 8px;
+
             background-color: transparent;
             color: #adb5bd;
+
             cursor: pointer;
+
             display: flex;
             align-items: center;
             gap: 10px;
+
+            transition: 0.2s;
         }
 
-        .nav-item:hover, .nav-item.active {
+        .nav-item:hover,
+        .nav-item.active {
             background-color: #3a506b;
             color: #ffffff;
         }
 
-        /* Қисми асосӣ */
+        /* =========================
+           MAIN CONTENT
+           ========================= */
+
         .main-content {
             flex: 1;
+            min-width: 0;
+
             display: flex;
             flex-direction: column;
+
             padding: 12px;
+
             overflow-y: auto;
+
             background-color: #0b132b;
-            width: 100%;
         }
 
-        /* Қисми болоӣ, ки дар он тугма ва интихобҳо паҳлӯи ҳам ҳастанд */
+        /* =========================
+           TOP BAR
+           ========================= */
+
         .top-action-bar {
             display: flex;
             align-items: center;
+
             gap: 8px;
+
             margin-bottom: 12px;
+
             width: 100%;
         }
+
+        /* =========================
+           MENU BUTTON
+           ========================= */
 
         .menu-toggle {
             background: #4cc9f0;
             color: #0b132b;
+
             border: none;
+
             padding: 8px 12px;
+
             border-radius: 8px;
+
             font-weight: bold;
+
             cursor: pointer;
+
             font-size: 14px;
+
             height: 44px;
+
             display: flex;
             align-items: center;
             justify-content: center;
+
             flex-shrink: 0;
+
+            transition: 0.2s;
         }
 
-        /* Блоки интихобҳо */
+        .menu-toggle:hover {
+            transform: scale(1.03);
+        }
+
+        /* =========================
+           SELECTORS
+           ========================= */
+
         .selectors-row {
             display: grid;
+
             grid-template-columns: repeat(3, 1fr);
+
             gap: 6px;
+
             flex: 1;
+
             background-color: #1c2541;
+
             padding: 8px;
+
             border-radius: 10px;
+
             border: 1px solid #3a506b;
+
+            min-width: 0;
         }
 
         .select-group {
             display: flex;
             flex-direction: column;
+
             gap: 2px;
+
+            min-width: 0;
         }
 
         .select-group label {
             font-size: 10px;
             color: #adb5bd;
+
+            white-space: nowrap;
         }
 
         .select-group select {
-            padding: 5px 2px;
+            padding: 5px 4px;
+
             border-radius: 6px;
+
             border: 1px solid #3a506b;
+
             background-color: #0b132b;
             color: #ffffff;
+
             font-size: 11px;
+
             outline: none;
+
             width: 100%;
+
+            cursor: pointer;
         }
 
-        /* Майдони саволҳо */
+        .select-group select:focus {
+            border-color: #4cc9f0;
+        }
+
+        /* =========================
+           QUESTIONS
+           ========================= */
+
         .questions-container {
             background-color: #1c2541;
+
             padding: 15px;
+
             border-radius: 10px;
+
             border: 1px solid #3a506b;
+
             flex: 1;
+
             display: flex;
             flex-direction: column;
+
             gap: 15px;
+
+            min-height: 300px;
         }
 
         .question-card {
             background-color: #0b132b;
+
             padding: 12px;
+
             border-radius: 8px;
+
             border: 1px solid #3a506b;
         }
 
-        /* Тарҳрезӣ барои телефонҳо (экрани то 1024px) */
+        /* =========================
+           MOBILE
+           ========================= */
+
         @media screen and (max-width: 1024px) {
+
+            /*
+             * Дар телефон Sidebar аз аввал ПӮШИДА аст.
+             */
+
             .sidebar {
                 position: fixed;
-                left: -280px; /* Дар аввал сайдбар пинҳон аст */
+
+                left: -280px;
+
                 top: 0;
                 bottom: 0;
+
                 width: 260px;
-                box-shadow: 5px 0 20px rgba(0,0,0,0.8);
+                min-width: 260px;
+
+                height: 100vh;
+
+                box-shadow: 5px 0 20px rgba(0, 0, 0, 0.8);
+
+                transition: left 0.3s ease;
             }
+
+            /*
+             * Вақте ☰ пахш мешавад
+             */
 
             .sidebar.open {
-                left: 0; /* Ҳангоми зер кардани тугма кушода мешавад */
+                left: 0;
+            }
+
+            /*
+             * Main тамоми экранро мегирад
+             */
+
+            .main-content {
+                width: 100%;
+                min-width: 0;
+
+                padding: 10px;
+            }
+
+            /*
+             * MENU + SELECTORS
+             */
+
+            .top-action-bar {
+                display: flex;
+
+                align-items: stretch;
+
+                gap: 6px;
+
+                width: 100%;
+            }
+
+            /*
+             * MENU BUTTON
+             */
+
+            .menu-toggle {
+                width: 42px;
+                min-width: 42px;
+
+                height: 52px;
+
+                padding: 0;
+
+                font-size: 18px;
+            }
+
+            /*
+             * СИНФ + ЧОРЯК + ФАН
+             * Ҳама дар як қатор
+             */
+
+            .selectors-row {
+                flex: 1;
+
+                display: grid;
+
+                grid-template-columns:
+                    repeat(3, minmax(0, 1fr));
+
+                gap: 5px;
+
+                padding: 6px;
+
+                min-width: 0;
+            }
+
+            .select-group {
+                min-width: 0;
+                width: 100%;
+            }
+
+            .select-group label {
+                font-size: 9px;
+
+                white-space: nowrap;
+            }
+
+            .select-group select {
+                width: 100%;
+
+                min-width: 0;
+
+                height: 32px;
+
+                padding: 3px 2px;
+
+                font-size: 10px;
+
+                text-overflow: ellipsis;
+            }
+
+            /*
+             * QUESTIONS
+             */
+
+            .questions-container {
+                width: 100%;
+
+                padding: 10px;
+
+                margin-top: 2px;
             }
         }
+
+        /* =========================
+           VERY SMALL PHONES
+           ========================= */
+
+        @media screen and (max-width: 380px) {
+
+            .main-content {
+                padding: 7px;
+            }
+
+            .top-action-bar {
+                gap: 4px;
+            }
+
+            .menu-toggle {
+                width: 38px;
+                min-width: 38px;
+
+                height: 50px;
+
+                font-size: 16px;
+            }
+
+            .selectors-row {
+                gap: 3px;
+
+                padding: 5px;
+            }
+
+            .select-group label {
+                font-size: 8px;
+            }
+
+            .select-group select {
+                height: 30px;
+
+                font-size: 9px;
+            }
+
+            .questions-container {
+                padding: 8px;
+            }
+        }
+
+        /* =========================
+           TABLET / DESKTOP
+           ========================= */
+
+        @media screen and (min-width: 1025px) {
+
+            /*
+             * Дар компютер Sidebar ҳамеша кушода
+             */
+
+            .sidebar {
+                position: sticky;
+                top: 0;
+            }
+        }
+
     </style>
 </head>
+
 <body>
 
-    <div class="app-container">
-        <!-- Сайдбар ки дар аввал дар телефон маҳкам аст -->
-        <div class="sidebar" id="sidebar">
-            <div class="sidebar-logo">Choryak Platform</div>
-            <div class="nav-item active">🏠 Асосӣ</div>
-            <div class="nav-item">📚 Синфҳо</div>
-            <div class="nav-item">📊 Натиҷаҳо</div>
-            <div class="nav-item">⚙️ Танзимот</div>
+<div class="app-container">
+
+    <!-- =========================
+         SIDEBAR
+         ========================= -->
+
+    <div class="sidebar" id="sidebar">
+
+        <div class="sidebar-logo">
+            Choryak Platform
         </div>
 
-        <!-- Қисми асосӣ -->
-        <div class="main-content">
-            <!-- Тугмаи меню ва интихобҳо дар боло, дар як сатр паҳлӯи ҳам -->
-            <div class="top-action-bar">
-                <button class="menu-toggle" id="menuToggle">☰</button>
-                
-                <div class="selectors-row">
-                    <div class="select-group">
-                        <label>Синф</label>
-                        <select id="classSelect">
-                            <option value="">Синф</option>
-                            <option value="5">5</option>
-                            <option value="6">6</option>
-                            <option value="7">7</option>
-                            <option value="8">8</option>
-                            <option value="9">9</option>
-                            <option value="10">10</option>
-                            <option value="11">11</option>
-                        </select>
-                    </div>
-
-                    <div class="select-group">
-                        <label>Чоряк</label>
-                        <select id="quarterSelect">
-                            <option value="">Чор.</option>
-                            <option value="1">1</option>
-                            <option value="2">2</option>
-                            <option value="3">3</option>
-                            <option value="4">4</option>
-                        </select>
-                    </div>
-
-                    <div class="select-group">
-                        <label>Фан</label>
-                        <select id="subjectSelect">
-                            <option value="">Фан</option>
-                            <option value="math">Мат.</option>
-                            <option value="physics">Физ.</option>
-                            <option value="informatics">Инф.</option>
-                            <option value="literature">Адаб.</option>
-                        </select>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Майдони саволҳо -->
-            <div class="questions-container" id="questionsContainer">
-                <p style="color: #adb5bd; text-align: center; font-size: 12px; margin-top: 10px;">Параметрҳоро интихоб кунед то тестҳо бароянд.</p>
-            </div>
+        <div class="nav-item active">
+            🏠 Асосӣ
         </div>
+
+        <div class="nav-item">
+            📚 Синфҳо
+        </div>
+
+        <div class="nav-item">
+            📊 Натиҷаҳо
+        </div>
+
+        <div class="nav-item">
+            ⚙️ Танзимот
+        </div>
+
     </div>
 
-    <script>
-        const menuToggle = document.getElementById('menuToggle');
-        const sidebar = document.getElementById('sidebar');
-        const classSelect = document.getElementById('classSelect');
-        const quarterSelect = document.getElementById('quarterSelect');
-        const subjectSelect = document.getElementById('subjectSelect');
-        const questionsContainer = document.getElementById('questionsContainer');
 
-        // Кушода ва пӯшида кардани сайдбар бо тугма
-        menuToggle.addEventListener('click', () => {
-            sidebar.classList.toggle('open');
-        });
+    <!-- =========================
+         MAIN CONTENT
+         ========================= -->
 
-        // Пӯшида шудани сайдбар ҳангоми зер кардан ба беруни он дар телефон
-        document.addEventListener('click', (event) => {
-            if (window.innerWidth <= 1024) {
-                if (!sidebar.contains(event.target) && event.target !== menuToggle) {
-                    sidebar.classList.remove('open');
-                }
+    <div class="main-content">
+
+        <!-- TOP BAR -->
+
+        <div class="top-action-bar">
+
+            <!-- MENU -->
+
+            <button
+                class="menu-toggle"
+                id="menuToggle"
+                aria-label="Кушодан ё пӯшидани меню"
+            >
+                ☰
+            </button>
+
+
+            <!-- SELECTORS -->
+
+            <div class="selectors-row">
+
+                <!-- СИНФ -->
+
+                <div class="select-group">
+
+                    <label for="classSelect">
+                        Синф
+                    </label>
+
+                    <select id="classSelect">
+
+                        <option value="">
+                            Синф
+                        </option>
+
+                        <option value="5">
+                            5
+                        </option>
+
+                        <option value="6">
+                            6
+                        </option>
+
+                        <option value="7">
+                            7
+                        </option>
+
+                        <option value="8">
+                            8
+                        </option>
+
+                        <option value="9">
+                            9
+                        </option>
+
+                        <option value="10">
+                            10
+                        </option>
+
+                        <option value="11">
+                            11
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- ЧОРЯК -->
+
+                <div class="select-group">
+
+                    <label for="quarterSelect">
+                        Чоряк
+                    </label>
+
+                    <select id="quarterSelect">
+
+                        <option value="">
+                            Чор.
+                        </option>
+
+                        <option value="1">
+                            1
+                        </option>
+
+                        <option value="2">
+                            2
+                        </option>
+
+                        <option value="3">
+                            3
+                        </option>
+
+                        <option value="4">
+                            4
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- ФАН -->
+
+                <div class="select-group">
+
+                    <label for="subjectSelect">
+                        Фан
+                    </label>
+
+                    <select id="subjectSelect">
+
+                        <option value="">
+                            Фан
+                        </option>
+
+                        <option value="math">
+                            Мат.
+                        </option>
+
+                        <option value="physics">
+                            Физ.
+                        </option>
+
+                        <option value="informatics">
+                            Инф.
+                        </option>
+
+                        <option value="literature">
+                            Адаб.
+                        </option>
+
+                    </select>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- =========================
+             QUESTIONS
+             ========================= -->
+
+        <div
+            class="questions-container"
+            id="questionsContainer"
+        >
+
+            <p
+                style="
+                    color:#adb5bd;
+                    text-align:center;
+                    font-size:12px;
+                    margin-top:10px;
+                "
+            >
+                Параметрҳоро интихоб кунед то тестҳо бароянд.
+            </p>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     JAVASCRIPT
+     ========================= -->
+
+<script>
+
+    const menuToggle =
+        document.getElementById('menuToggle');
+
+    const sidebar =
+        document.getElementById('sidebar');
+
+    const classSelect =
+        document.getElementById('classSelect');
+
+    const quarterSelect =
+        document.getElementById('quarterSelect');
+
+    const subjectSelect =
+        document.getElementById('subjectSelect');
+
+    const questionsContainer =
+        document.getElementById('questionsContainer');
+
+
+    /* =================================
+       MENU
+       ================================= */
+
+    menuToggle.addEventListener('click', function(event) {
+
+        event.stopPropagation();
+
+        sidebar.classList.toggle('open');
+
+    });
+
+
+    /* =================================
+       CLOSE SIDEBAR
+       WHEN CLICKING OUTSIDE
+       ONLY ON MOBILE
+       ================================= */
+
+    document.addEventListener('click', function(event) {
+
+        if (window.innerWidth <= 1024) {
+
+            const clickedInsideSidebar =
+                sidebar.contains(event.target);
+
+            const clickedMenu =
+                menuToggle.contains(event.target);
+
+            if (!clickedInsideSidebar && !clickedMenu) {
+
+                sidebar.classList.remove('open');
+
             }
-        });
 
-        function checkAndLoadQuestions() {
-            const cls = classSelect.value;
-            const qrt = quarterSelect.value;
-            const sub = subjectSelect.value;
-
-            if (cls && qrt && sub) {
-                questionsContainer.innerHTML = `
-                    <div style="font-size: 13px; font-weight: bold; color: #4cc9f0; margin-bottom: 5px;">Тестҳои Синфи ${cls} (Чоряки ${qrt})</div>
-                    <div class="question-card">
-                        <p style="font-size: 12px; margin-bottom: 6px;">1. Саволи мисолӣ аз фанни интихобшуда?</p>
-                        <div style="font-size: 11px; color: #adb5bd; display: flex; flex-direction: column; gap: 3px;">
-                            <label><input type="radio" name="q1"> Ҷавоби الف</label>
-                            <label><input type="radio" name="q1"> Ҷавоби б</label>
-                            <label><input type="radio" name="q1"> Ҷавоби в</label>
-                        </div>
-                    </div>
-                `;
-            } else {
-                questionsContainer.innerHTML = `<p style="color: #adb5bd; text-align: center; font-size: 12px; margin-top: 10px;">Лутфан параметрҳоро пур кунед.</p>`;
-            }
         }
 
-        classSelect.addEventListener('change', checkAndLoadQuestions);
-        quarterSelect.addEventListener('change', checkAndLoadQuestions);
-        subjectSelect.addEventListener('change', checkAndLoadQuestions);
-    </script>
+    });
+
+
+    /* =================================
+       LOAD QUESTIONS
+       ================================= */
+
+    function checkAndLoadQuestions() {
+
+        const cls =
+            classSelect.value;
+
+        const qrt =
+            quarterSelect.value;
+
+        const sub =
+            subjectSelect.value;
+
+
+        if (cls && qrt && sub) {
+
+            questionsContainer.innerHTML = `
+
+                <div
+                    style="
+                        font-size:13px;
+                        font-weight:bold;
+                        color:#4cc9f0;
+                        margin-bottom:5px;
+                    "
+                >
+                    Тестҳои Синфи ${cls}
+                    (Чоряки ${qrt})
+                </div>
+
+
+                <div class="question-card">
+
+                    <p
+                        style="
+                            font-size:12px;
+                            margin-bottom:6px;
+                        "
+                    >
+                        1. Саволи мисолӣ аз фанни
+                        интихобшуда?
+                    </p>
+
+
+                    <div
+                        style="
+                            font-size:11px;
+                            color:#adb5bd;
+                            display:flex;
+                            flex-direction:column;
+                            gap:3px;
+                        "
+                    >
+
+                        <label>
+                            <input
+                                type="radio"
+                                name="q1"
+                            >
+                            Ҷавоби А
+                        </label>
+
+
+                        <label>
+                            <input
+                                type="radio"
+                                name="q1"
+                            >
+                            Ҷавоби Б
+                        </label>
+
+
+                        <label>
+                            <input
+                                type="radio"
+                                name="q1"
+                            >
+                            Ҷавоби В
+                        </label>
+
+
+                        <label>
+                            <input
+                                type="radio"
+                                name="q1"
+                            >
+                            Ҷавоби Г
+                        </label>
+
+                    </div>
+
+                </div>
+
+            `;
+
+        } else {
+
+            questionsContainer.innerHTML = `
+
+                <p
+                    style="
+                        color:#adb5bd;
+                        text-align:center;
+                        font-size:12px;
+                        margin-top:10px;
+                    "
+                >
+                    Лутфан параметрҳоро пур кунед.
+                </p>
+
+            `;
+
+        }
+
+    }
+
+
+    /* =================================
+       SELECT EVENTS
+       ================================= */
+
+    classSelect.addEventListener(
+        'change',
+        checkAndLoadQuestions
+    );
+
+    quarterSelect.addEventListener(
+        'change',
+        checkAndLoadQuestions
+    );
+
+    subjectSelect.addEventListener(
+        'change',
+        checkAndLoadQuestions
+    );
+
+
+    /* =================================
+       RESET SIDEBAR ON RESIZE
+       ================================= */
+
+    window.addEventListener('resize', function() {
+
+        if (window.innerWidth > 1024) {
+
+            sidebar.classList.remove('open');
+
+        }
+
+    });
+
+</script>
+
 </body>
 </html>
+```
